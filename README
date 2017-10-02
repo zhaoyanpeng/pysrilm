@@ -3,6 +3,21 @@ Make it compatible with both python 2.x and 3.x.
 This is an extremely simple Python wrapper for SRILM:
   http://www.speech.sri.com/projects/srilm/
 
+Install SRILM
+- `vim Makefile`
+  - SRILM = $(PWD) # or a specific direcotry
+  - MACHINE_TYPE := i686-m64 # output from `uname -i`
+- `vim common/Makefile.machine.MACHINE_TYPE`
+  - `NO_TCL = 1` -> `NO_TCL = X`
+  - `GAWK = /usr/bin/awk` -> `GAWK = /usr/bin/gawk` # output from `which gawk`
+  - compile with `-fPIC`
+    - `ADDITIONAL_CFLAGS = -fopenmp`   -> `ADDITIONAL_CFLAGS = -fopenmp -fPIC`
+    - `ADDITIONAL_CXXFLAGS = -fopenmp` -> `ADDITIONAL_CXXFLAGS = -fopenmp -fPIC`
+- `make World` & `make test`
+- `export SRILM/bin:SRILM/bin/i686-m64:$PATH`
+- `which ngram-count` # test
+
+
 Basically it lets you load a SRILM-format ngram model into memory, and
 then query it directly from Python.
 
