@@ -70,7 +70,8 @@ cdef class _Vocab:
         del_Vocab(self._vocab)
 
     def intern(self, word):
-        return self._vocab.getIndex(word,
+        # ensure of the binary representation of str
+        return self._vocab.getIndex(str.encode(word),
                                     self._vocab.unkIndex())
 
     def extern(self, idx):
@@ -100,6 +101,7 @@ cdef class LM:
     cdef c_Ngram * _ngram
     cdef public object path
     def __cinit__(self, path, debug=False, lower=False, vocab=None):
+        path = str.encode(path) # binary representation of str
         if vocab is None:
             vocab = _Vocab(lower)
         self.vocab = vocab
@@ -120,6 +122,7 @@ cdef class LM:
     def logprob_strings(self, word, context):
         word_i = self.vocab.intern(word)
         context_i = map(self.vocab.intern, context)
+        context_i = list(context_i) # compatible with python 3.x
         return self.logprob(word_i, context_i)
         
     # Like above, but takes interned words.
@@ -139,6 +142,8 @@ cdef class LM:
     #   logP(The | <s>) + logP(man | <s> The) + logP(who | <s> The man)
     def total_logprob_strings(self, ngram):
         ngram_i = map(self.vocab.intern, ngram)
+        ngram_i = list(ngram_i)
+        ngram_i.append(self.vocab.intern("</s>"))
         ngram_i.reverse()
         ngram_i.append(self.vocab.intern("<s>"))
         lp = 0

@@ -20,7 +20,7 @@ setup(
                 language="c++",
                 include_dirs=[SRILM_INCLUDE_DIR],
                 libraries=["oolm", "dstruct", "misc"],
-                extra_compile_args=['-fopenmp'],
+                extra_compile_args=['-fopenmp', '-fPIC'],
                 extra_link_args=["-L" + SRILM_LIB_DIR, '-lgomp', '-lz'],
                 )
       ],

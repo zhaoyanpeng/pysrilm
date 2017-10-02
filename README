@@ -1,3 +1,5 @@
+Make it compatible with both python 2.x and 3.x.
+
 This is an extremely simple Python wrapper for SRILM:
   http://www.speech.sri.com/projects/srilm/
 
